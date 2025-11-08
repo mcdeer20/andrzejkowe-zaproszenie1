@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andrzejkowa Noc Saunowa - Zaproszenie</title>
+    <style>
+        /* CSS DLA STRUKTURY GRY */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #1a1a1a;
+            color: white;
+            overflow: hidden;
+        }
+        #game-container {
+            width: 100%;
+            max-width: 800px;
+            height: 100vh;
+            position: relative;
+            background-color: #000;
+            overflow: hidden;
+        }
+        .scene {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            text-align: center;
+            background-size: cover; /* Domyślne: pokrywa cały obszar */
+            background-position: center;
+            transition: opacity 0.5s ease-in-out;
+            opacity: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .scene.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* POPRAWKI UX/UI DLA DIALOGÓW */
+        .dialogue-box {
+            /* Efekt "Frosted Glass" (Rozmyte tło) */
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            width: 85%;
+            min-height: 70px;
+            border: 1px solid rgba(255, 255, 255, 0.2); 
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            text-align: left;
+        }
+        .narrator-name {
+            font-weight: 800;
+            color: #FFC000; /* Złoty akcent */
+            text-shadow: 0 0 3px rgba(0, 0, 0, 0.8);
+            margin-bottom: 5px;
+            font-size: 1.1em;
+            display: block;
+            text-align: left;
+        }
+        .dialogue-text {
+            color: #F0F0F0; /* Miękka biel */
+            font-size: 1.1em;
+            line-height: 1.4;
+            margin-top: 5px;
+        }
+
+        /* STYLISTYKA PRZYCISKÓW */
+        .choice-button, .action-button {
+            padding: 12px 22px;
+            margin: 8px 5px;
+            cursor: pointer;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+        .choice-button {
+            background-color: #ff4500;
+            color: white;
+        }
+        .choice-button:hover {
+            background-color: #e03b00;
+        }
+        .action-button {
+            background-color: #0088CC; /* Nowy kolor akcji */
+            color: white;
+        }
+        .action-button:hover {
+            background-color: #0066AA;
+        }
+
+        /* STYLISTYKA BILETU */
+    #ticket-info {
+            /* Nowe tło: Delikatny gradient w ciepłych odcieniach */
+            background: linear-gradient(to bottom, #fdf9f3, #ece6da); /* Zaczyna się od jasnego kremu, kończy na jasnym beżu */
+            
+            color: #333; /* Ciemniejszy, ale miękki kolor tekstu dla lepszego kontrastu */
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            margin-bottom: 50px;
+            max-width: 350px;
+            /* Możemy też dodać delikatny border, który wygląda jak rama */
+            border: 1px solid rgba(255, 255, 255, 0.5); 
+        }
+        #ticket-info h2 {
+            color: #ff4500; /* Kolor akcentu (saunowy/sportowy) */
+            margin-bottom: 5px;
+            font-size: 1.8em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1); /* Delikatny cień dla nagłówka */
+        }
+        #ticket-info p {
+            font-size: 1.1em;
+            margin: 8px 0;
+            font-weight: 500;
+            color: #444; /* Ujednolicony kolor tekstu */
+        }
+        /* Dodatkowo zmień kolor dla specyficznego paragrafu o adresie */
+        #ticket-info p.location-address {
+            font-size: 0.9em; 
+            color: #777; /* Delikatniejszy kolor dla adresu */
+            margin-top: 5px;
+        }
+        /* KLASA POPRAWIAJĄCA SKALOWANIE SZEROKICH OBRAZÓW (4:5, 5:5, 7:8) */
+        .wide-scene {
+            background-size: contain !important; 
+            background-repeat: no-repeat !important;
+            background-color: #000 !important; 
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+ <div id="scene1" class="scene active" style="background-image: url('grafika/scena 1.jpg');"> 
+        <div class="dialogue-box" style="
+            background: rgba(0, 0, 0, 0.4); /* Duża przezroczystość */
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            width: 50%; /* Bardzo mały rozmiar */
+            padding: 20px; /* Duży padding dla lepszego wyglądu */
+            margin-bottom: 40px; /* Duży margines, by nie był przy samej krawędzi */
+            text-align: center; /* Wyśrodkowanie tekstu i przycisku */
+        ">
+            <h1>ANDRZEJKOWA NOC SAUNOWA 🏐</h1>
+            <p class="dialogue-text" style="text-align: center;">Klucz do biletu jest w grze!</p>
+            <button class="action-button" onclick="nextScene(2)">ROZPOCZNIJ WIDOWISKO</button>
+        </div>
+    </div>
+
+    <div id="scene2" class="scene" style="background-image: url('grafika/scena 2.jpg');">
+        <div class="dialogue-box">
+            <span class="narrator-name">Siatkarka:</span>
+            <p class="dialogue-text">Uff, ciężki trening. Telefon wibruje: wiadomość od Jelonków. Co teraz?</p>
+            <button class="choice-button" onclick="nextScene(3)">PRZECZYTAJ OD RAZU</button>
+            <button class="choice-button" onclick="nextScene(3)">ŁYCZEK WODY I PRZECZYTAJ</button>
+        </div>
+    </div>
+    
+    <div id="scene3" class="scene" style="background-image: url('grafika/scena 3.jpg');">
+        <div class="dialogue-box">
+            <span class="narrator-name">Jelonek:</span>
+            <p class="dialogue-text">Hej! Chcesz z nami iść na sauny? Andrzejki idą, czas na relaks! Co odpisujesz?</p>
+            <button class="action-button" onclick="instantScene(31)">ODPISZ: DALEJ</button>
+        </div>
+    </div>
+    
+    <div id="scene31" class="scene" style="background-image: url('grafika/scena 3.1.jpg');">
+        <div class="dialogue-box">
+            <span class="narrator-name">Ty:</span>
+            <p class="dialogue-text" style="text-align: right; color: #76ff03;">PEWNIE!</p>
+            <span class="narrator-name">Narrator:</span>
+            <p class="dialogue-text">Decyzja podjęta. Sauny, nadchodzę! (Kliknij 'DALEJ', aby przenieść się do Term)</p>
+            <button class="action-button" onclick="nextScene(4)">DALEJ</button>
+        </div>
+    </div>
+    
+    <div id="scene4" class="scene wide-scene" style="background-image: url('grafika/scena 4.jpg');">
+        <div class="dialogue-box">
+            <span class="narrator-name">Ty:</span>
+            <p class="dialogue-text">Palac Saturna...co? Ach! Termy Rzymskie. Jestem na miejscu. Hmmm... no i co teraz?</p>
+            <button class="action-button" onclick="nextScene(5)">ROZEJRZYJ SIĘ</button>
+        </div>
+    </div>
+
+    <div id="scene5" class="scene wide-scene" style="background-image: url('grafika/scena 5.png');">
+        <div class="dialogue-box">
+            <span class="narrator-name">Jelonki:</span>
+            <p class="dialogue-text">HEJ ASIA!!! Znakomita robota, super że dotarłaś! Wchodzimy, czas na rytuał!</p>
+            <button class="action-button" onclick="nextScene(6)">WCHODZĘ</button>
+        </div>
+    </div>
+
+    <div id="scene6" class="scene" style="background-image: url('grafika/scena 6.png');">
+        <div class="dialogue-box">
+            <span class="narrator-name">Narrator:</span>
+            <p class="dialogue-text">Pierwsza runda w tradycyjnej saunie. Wyciskasz z siebie resztki potu... **Prawdziwy relaks...**</p>
+            <button class="action-button" onclick="nextScene(7)">DAWAJ DALEJ!</button>
+        </div>
+    </div>
+
+    <div id="scene7" class="scene wide-scene" style="background-image: url('grafika/scena 7.png');">
+        <div class="dialogue-box">
+            <span class="narrator-name">Pati:</span>
+            <p class="dialogue-text">Dobra, Asia. Teraz crème de la crème. Saunarium Colosseum. Dziś mamy show! Siadaj i oglądaj.</p>
+            <button class="action-button" onclick="nextScene(8)">CZEKAM NA SPEKTAKL</button>
+        </div>
+    </div>
+
+    <div id="scene8" class="scene wide-scene" style="background-image: url('grafika/scena 8.png');">
+        <div class="dialogue-box">
+            <span class="narrator-name">Jelonki razem:</span>
+            <p class="dialogue-text">Oto nasz andrzejkowy prezent! Gorący, paryski kabaret w samym Koloseum!</p>
+            <button class="action-button" onclick="nextScene(9)">TO BYŁO MOCNE</button>
+        </div>
+    </div>
+    
+<div id="scene9" class="scene" style="background-image: url('grafika/scena 9.jpg'); 
+      /* KLUCZOWA ZMIANA: Używamy space-between, aby rozciągnąć zawartość na całą wysokość */
+      justify-content: space-between; 
+      padding-top: 50px; /* Dodatkowy padding na górze */
+      padding-bottom: 50px; /* Dodatkowy padding na dole */">
+
+    <div class="dialogue-box" style="
+        background: rgba(255, 255, 255, 0.9); 
+        color: black; 
+        text-align: center; 
+        margin-bottom: 0; /* Usuwamy dolny margines, bo blok jest pozycjonowany na górze */
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.7); /* Wyróżnienie */
+        align-self: flex-start; /* Upewnia się, że blok startuje od góry */
+    ">
+        <h2>GRATULACJE! 🔥</h2>
+        <p class="dialogue-text" style="color: black; text-align: center; margin-bottom: 5px;">
+            Przeszłaś (wirtualny) trial saunowy i udowodniłaś, że znasz zasady saunowego fair play.
+        </p>
+          </div>
+
+    <div style="text-align: center; align-self: flex-end; width: 100%;"> 
+        <button class="choice-button" onclick="nextScene(10)">ZDOBĄDŹ BILET</button>
+    </div>
+</div>
+    
+  <div id="scene10" class="scene" style="background-image: url('grafika/scena 10.png'); justify-content: center;">
+    <div id="ticket-info">
+        
+        <h2>TWÓJ CYFROWY BILET</h2>
+        
+        <p style="font-weight: 700; margin: 15px 0;">Andrzejkowa Noc Saunowa</p>
+        
+        <hr style="border: 0; height: 1px; background: #ddd; margin: 20px 0;">
+
+        <p>Data: **28 Listopada**</p>
+        <p>Godzina: **18:00**</p>
+        <p>Lokalizacja: Termy Rzymskie</p>
+        <p class="location-address">Bolesława i Władysława Dehnelów 2, 41-250 Czeladź</p>
+
+        <hr style="border: 0; height: 1px; background: #ddd; margin: 20px 0 30px 0;">
+        
+        <a href="Andrzejkowa_Noc_Saunowa_Zaproszenie.pdf" download="Andrzejkowa_Noc_Saunowa_Zaproszenie.pdf" 
+           class="choice-button" 
+           style="text-decoration: none; display: block; text-align: center; margin: 0 auto 15px auto; padding: 15px 20px; font-size: 18px; max-width: 100%;">
+            POBIERZ SWOJE ZAPROSZENIE (PDF)
+        </a>
+        
+        <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Andrzejkowa+Noc+Saunowa&dates=20251128T180000/20251128T230000&details=Zaproszenie+od+Jelonków+na+Noc+Saunową+w+Termach+Rzymskich!&location=Termy+Rzymskie%2C+Czeladź" 
+           target="_blank" class="action-button" 
+           style="text-decoration: none; display: block; text-align: center; 
+                  margin-top: 5px; background-color: #007bff; color: white;">
+            DODAJ DO KALENDARZA
+        </a>
+        
+        <p style="margin-top: 25px; font-weight: bold; font-size: 0.9em;">Pamiętaj: Czekamy na Ciebie!</p>
+
+    </div>
+</div>
+
+</div>
+
+<script>
+    let currentScene = 1;
+    
+    function showScene(sceneID) {
+        // Ukryj wszystkie sceny
+        document.querySelectorAll('.scene').forEach(scene => {
+            scene.classList.remove('active');
+        });
+
+        // Pokaż aktywną scenę
+        const nextSceneElement = document.getElementById('scene' + sceneID);
+        if (nextSceneElement) {
+            nextSceneElement.classList.add('active');
+            currentScene = sceneID;
+        }
+    }
+
+    // FUNKCJA DLA STANDARDOWYCH PRZEJŚĆ Z ANIMACJĄ ZANIKANIA (500ms)
+    function nextScene(sceneID) {
+        // Szybkie ukrycie obecnej sceny (do zaniknięcia)
+        const currentElement = document.getElementById('scene' + currentScene);
+        if (currentElement) {
+            currentElement.style.opacity = '0';
+        }
+
+        setTimeout(() => {
+            showScene(sceneID);
+            const nextElement = document.getElementById('scene' + sceneID);
+            if (nextElement) {
+                nextElement.style.opacity = '1';
+            }
+        }, 500); // Standardowe opóźnienie 500ms
+    }
+
+    // NOWA FUNKCJA DLA NATYCHMIASTOWYCH PRZEJŚĆ (OPUSZCZA ANIMACJĘ)
+    function instantScene(sceneID) {
+        // Ustawienie przezroczystości na 0, a następnie natychmiastowe przejście
+        const currentElement = document.getElementById('scene' + currentScene);
+        if (currentElement) {
+            currentElement.style.opacity = '0';
+        }
+        
+        showScene(sceneID);
+        const nextElement = document.getElementById('scene' + sceneID);
+        if (nextElement) {
+            nextElement.style.opacity = '1';
+        }
+    }
+    
+    // Inicjalizacja gry po załadowaniu strony
+    document.addEventListener('DOMContentLoaded', () => {
+        showScene(1);
+    });
+</script>
+
+</body>
+</html>
